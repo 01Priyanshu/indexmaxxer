@@ -1,0 +1,302 @@
+{
+  "total_frequency": 100,
+  "queries": [
+    {
+      "id": "Q1",
+      "frequency": 30,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "customer_id"
+          }
+        ],
+        "join": [],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q2",
+      "frequency": 20,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2 AND \"orders\".\"order_date\" >= CAST('2026-01-01' AS DATE)",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s AND \"orders\".\"order_date\" >= CAST(%s AS DATE)",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "customer_id"
+          },
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "order_date"
+          }
+        ],
+        "join": [],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q3",
+      "frequency": 10,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 3 AND \"orders\".\"order_date\" >= CAST('2026-06-01' AS DATE)",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s AND \"orders\".\"order_date\" >= CAST(%s AS DATE)",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "customer_id"
+          },
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "order_date"
+          }
+        ],
+        "join": [],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q4",
+      "frequency": 10,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"status\" = 'delivered'",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"status\" = %s",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "status"
+          }
+        ],
+        "join": [],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q5",
+      "frequency": 10,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"order_date\" >= CAST('2026-06-01' AS DATE) AND \"orders\".\"order_date\" < CAST('2026-06-08' AS DATE)",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"order_date\" >= CAST(%s AS DATE) AND \"orders\".\"order_date\" < CAST(%s AS DATE)",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "order_date"
+          }
+        ],
+        "join": [],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q6",
+      "frequency": 10,
+      "sql": "SELECT \"o\".\"order_id\" AS \"order_id\", \"o\".\"total_amount\" AS \"total_amount\", \"c\".\"region\" AS \"region\" FROM \"benchmark\".\"orders\" AS \"o\" JOIN \"benchmark\".\"customers\" AS \"c\" ON \"o\".\"customer_id\" = \"c\".\"customer_id\" WHERE \"c\".\"customer_id\" BETWEEN 1 AND 100",
+      "template": "SELECT \"o\".\"order_id\" AS \"order_id\", \"o\".\"total_amount\" AS \"total_amount\", \"c\".\"region\" AS \"region\" FROM \"benchmark\".\"orders\" AS \"o\" JOIN \"benchmark\".\"customers\" AS \"c\" ON \"o\".\"customer_id\" = \"c\".\"customer_id\" WHERE \"c\".\"customer_id\" BETWEEN %s AND %s",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "o"
+        },
+        {
+          "schema": "benchmark",
+          "table": "customers",
+          "alias": "c"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "customers",
+            "alias": "c",
+            "column": "customer_id"
+          }
+        ],
+        "join": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "o",
+            "column": "customer_id"
+          },
+          {
+            "schema": "benchmark",
+            "table": "customers",
+            "alias": "c",
+            "column": "customer_id"
+          }
+        ],
+        "order_by": [],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q7",
+      "frequency": 5,
+      "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2 ORDER BY \"orders\".\"order_date\" DESC LIMIT 20",
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s ORDER BY \"orders\".\"order_date\" DESC LIMIT 20",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "customer_id"
+          }
+        ],
+        "join": [],
+        "order_by": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "order_date"
+          }
+        ],
+        "group_by": []
+      }
+    },
+    {
+      "id": "Q8",
+      "frequency": 5,
+      "sql": "SELECT \"orders\".\"status\" AS \"status\", COUNT(*) AS \"order_count\", SUM(\"orders\".\"total_amount\") AS \"total_sales\" FROM \"benchmark\".\"orders\" AS \"orders\" GROUP BY \"orders\".\"status\"",
+      "template": "SELECT \"orders\".\"status\" AS \"status\", COUNT(*) AS \"order_count\", SUM(\"orders\".\"total_amount\") AS \"total_sales\" FROM \"benchmark\".\"orders\" AS \"orders\" GROUP BY \"orders\".\"status\"",
+      "tables": [
+        {
+          "schema": "benchmark",
+          "table": "orders",
+          "alias": "orders"
+        }
+      ],
+      "features": {
+        "where": [],
+        "join": [],
+        "order_by": [],
+        "group_by": [
+          {
+            "schema": "benchmark",
+            "table": "orders",
+            "alias": "orders",
+            "column": "status"
+          }
+        ]
+      }
+    }
+  ],
+  "patterns": [
+    {
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s",
+      "frequency": 30,
+      "query_ids": [
+        "Q1"
+      ]
+    },
+    {
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s AND \"orders\".\"order_date\" >= CAST(%s AS DATE)",
+      "frequency": 30,
+      "query_ids": [
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"status\" = %s",
+      "frequency": 10,
+      "query_ids": [
+        "Q4"
+      ]
+    },
+    {
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"order_date\" >= CAST(%s AS DATE) AND \"orders\".\"order_date\" < CAST(%s AS DATE)",
+      "frequency": 10,
+      "query_ids": [
+        "Q5"
+      ]
+    },
+    {
+      "template": "SELECT \"o\".\"order_id\" AS \"order_id\", \"o\".\"total_amount\" AS \"total_amount\", \"c\".\"region\" AS \"region\" FROM \"benchmark\".\"orders\" AS \"o\" JOIN \"benchmark\".\"customers\" AS \"c\" ON \"o\".\"customer_id\" = \"c\".\"customer_id\" WHERE \"c\".\"customer_id\" BETWEEN %s AND %s",
+      "frequency": 10,
+      "query_ids": [
+        "Q6"
+      ]
+    },
+    {
+      "template": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = %s ORDER BY \"orders\".\"order_date\" DESC LIMIT 20",
+      "frequency": 5,
+      "query_ids": [
+        "Q7"
+      ]
+    },
+    {
+      "template": "SELECT \"orders\".\"status\" AS \"status\", COUNT(*) AS \"order_count\", SUM(\"orders\".\"total_amount\") AS \"total_sales\" FROM \"benchmark\".\"orders\" AS \"orders\" GROUP BY \"orders\".\"status\"",
+      "frequency": 5,
+      "query_ids": [
+        "Q8"
+      ]
+    }
+  ]
+}

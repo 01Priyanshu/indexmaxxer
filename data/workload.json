@@ -1,0 +1,42 @@
+[
+  {
+    "id": "Q1",
+    "frequency": 30,
+    "sql": "SELECT * FROM benchmark.orders WHERE customer_id = 2"
+  },
+  {
+    "id": "Q2",
+    "frequency": 20,
+    "sql": "SELECT * FROM benchmark.orders WHERE customer_id = 2 AND order_date >= DATE '2026-01-01'"
+  },
+  {
+    "id": "Q3",
+    "frequency": 10,
+    "sql": "SELECT * FROM benchmark.orders WHERE customer_id = 3 AND order_date >= DATE '2026-06-01'"
+  },
+  {
+    "id": "Q4",
+    "frequency": 10,
+    "sql": "SELECT * FROM benchmark.orders WHERE status = 'delivered'"
+  },
+  {
+    "id": "Q5",
+    "frequency": 10,
+    "sql": "SELECT * FROM benchmark.orders WHERE order_date >= DATE '2026-06-01' AND order_date < DATE '2026-06-08'"
+  },
+  {
+    "id": "Q6",
+    "frequency": 10,
+    "sql": "SELECT o.order_id, o.total_amount, c.region FROM benchmark.orders o JOIN benchmark.customers c ON o.customer_id = c.customer_id WHERE c.customer_id BETWEEN 1 AND 100"
+  },
+  {
+    "id": "Q7",
+    "frequency": 5,
+    "sql": "SELECT * FROM benchmark.orders WHERE customer_id = 2 ORDER BY order_date DESC LIMIT 20"
+  },
+  {
+    "id": "Q8",
+    "frequency": 5,
+    "sql": "SELECT status, COUNT(*) AS order_count, SUM(total_amount) AS total_sales FROM benchmark.orders GROUP BY status"
+  }
+]

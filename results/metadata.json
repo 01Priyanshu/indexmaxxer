@@ -1,0 +1,109 @@
+{
+  "schema": "benchmark",
+  "tables": [
+    {
+      "table_name": "customers",
+      "estimated_rows": 10000,
+      "table_bytes": 565248,
+      "index_bytes": 245760,
+      "columns": [
+        {
+          "column_name": "customer_id",
+          "data_type": "integer",
+          "null_frac": 0.0,
+          "n_distinct": -1.0,
+          "estimated_distinct_values": 10000
+        },
+        {
+          "column_name": "customer_name",
+          "data_type": "text",
+          "null_frac": 0.0,
+          "n_distinct": -1.0,
+          "estimated_distinct_values": 10000
+        },
+        {
+          "column_name": "region",
+          "data_type": "text",
+          "null_frac": 0.0,
+          "n_distinct": 4.0,
+          "estimated_distinct_values": 4
+        }
+      ],
+      "indexes": [
+        {
+          "index_name": "customers_pkey",
+          "method": "btree",
+          "is_primary": true,
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "is_partial": false,
+          "has_expressions": false,
+          "definition": "CREATE UNIQUE INDEX customers_pkey ON benchmark.customers USING btree (customer_id)",
+          "key_columns": [
+            "customer_id"
+          ]
+        }
+      ]
+    },
+    {
+      "table_name": "orders",
+      "estimated_rows": 100000,
+      "table_bytes": 6488064,
+      "index_bytes": 2260992,
+      "columns": [
+        {
+          "column_name": "order_id",
+          "data_type": "bigint",
+          "null_frac": 0.0,
+          "n_distinct": -1.0,
+          "estimated_distinct_values": 100000
+        },
+        {
+          "column_name": "customer_id",
+          "data_type": "integer",
+          "null_frac": 0.0,
+          "n_distinct": 9877.0,
+          "estimated_distinct_values": 9877
+        },
+        {
+          "column_name": "order_date",
+          "data_type": "date",
+          "null_frac": 0.0,
+          "n_distinct": 730.0,
+          "estimated_distinct_values": 730
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "null_frac": 0.0,
+          "n_distinct": 4.0,
+          "estimated_distinct_values": 4
+        },
+        {
+          "column_name": "total_amount",
+          "data_type": "numeric(10,2)",
+          "null_frac": 0.0,
+          "n_distinct": -0.53894,
+          "estimated_distinct_values": 53894
+        }
+      ],
+      "indexes": [
+        {
+          "index_name": "orders_pkey",
+          "method": "btree",
+          "is_primary": true,
+          "is_unique": true,
+          "is_valid": true,
+          "is_ready": true,
+          "is_partial": false,
+          "has_expressions": false,
+          "definition": "CREATE UNIQUE INDEX orders_pkey ON benchmark.orders USING btree (order_id)",
+          "key_columns": [
+            "order_id"
+          ]
+        }
+      ]
+    }
+  ]
+}
