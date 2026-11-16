@@ -1,0 +1,98 @@
+[
+  {
+    "index_name": "imx_b37471c5a98591d5",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "customer_id"
+    ],
+    "source_query_ids": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q6",
+      "Q7"
+    ],
+    "source_frequency": 75,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "customer_id": 9877
+    }
+  },
+  {
+    "index_name": "imx_0164711c70d78c4d",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "order_date"
+    ],
+    "source_query_ids": [
+      "Q2",
+      "Q3",
+      "Q5",
+      "Q7"
+    ],
+    "source_frequency": 45,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "order_date": 730
+    }
+  },
+  {
+    "index_name": "imx_b2361e1b135f71c3",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "customer_id",
+      "order_date"
+    ],
+    "source_query_ids": [
+      "Q2",
+      "Q3",
+      "Q7"
+    ],
+    "source_frequency": 35,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "customer_id": 9877,
+      "order_date": 730
+    }
+  },
+  {
+    "index_name": "imx_683d5d03a255840e",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "order_date",
+      "customer_id"
+    ],
+    "source_query_ids": [
+      "Q2",
+      "Q3",
+      "Q7"
+    ],
+    "source_frequency": 35,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "order_date": 730,
+      "customer_id": 9877
+    }
+  },
+  {
+    "index_name": "imx_c33156f3c3a2071e",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "status"
+    ],
+    "source_query_ids": [
+      "Q4",
+      "Q8"
+    ],
+    "source_frequency": 15,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "status": 4
+    }
+  }
+]

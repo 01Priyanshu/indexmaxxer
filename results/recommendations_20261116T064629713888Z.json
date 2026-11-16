@@ -1,0 +1,132 @@
+{
+  "scope": "Individually tested indexes for the recorded read workload",
+  "minimum_improvement_pct": 5.0,
+  "write_cost_evaluated": false,
+  "selected_index": {
+    "index_name": "imx_b37471c5a98591d5",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "customer_id"
+    ],
+    "baseline_ms": 9.098065,
+    "indexed_ms": 6.220644999999999,
+    "improvement_pct": 31.62672502339784,
+    "index_size_bytes": 942080,
+    "diagnostic_queries_using_index": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q7"
+    ],
+    "eligible": true,
+    "reason": "Measured 31.6% improvement and passed the read-performance checks."
+  },
+  "rankings": [
+    {
+      "index_name": "imx_b37471c5a98591d5",
+      "schema": "benchmark",
+      "table": "orders",
+      "columns": [
+        "customer_id"
+      ],
+      "baseline_ms": 9.098065,
+      "indexed_ms": 6.220644999999999,
+      "improvement_pct": 31.62672502339784,
+      "index_size_bytes": 942080,
+      "diagnostic_queries_using_index": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q7"
+      ],
+      "eligible": true,
+      "reason": "Measured 31.6% improvement and passed the read-performance checks."
+    },
+    {
+      "index_name": "imx_683d5d03a255840e",
+      "schema": "benchmark",
+      "table": "orders",
+      "columns": [
+        "order_date",
+        "customer_id"
+      ],
+      "baseline_ms": 9.356405,
+      "indexed_ms": 6.800285,
+      "improvement_pct": 27.319467252646724,
+      "index_size_bytes": 2252800,
+      "diagnostic_queries_using_index": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q5",
+        "Q7"
+      ],
+      "eligible": true,
+      "reason": "Measured 27.3% improvement and passed the read-performance checks."
+    },
+    {
+      "index_name": "imx_b2361e1b135f71c3",
+      "schema": "benchmark",
+      "table": "orders",
+      "columns": [
+        "customer_id",
+        "order_date"
+      ],
+      "baseline_ms": 8.953814999999999,
+      "indexed_ms": 6.6135850000000005,
+      "improvement_pct": 26.1366802865594,
+      "index_size_bytes": 2252800,
+      "diagnostic_queries_using_index": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q7"
+      ],
+      "eligible": true,
+      "reason": "Measured 26.1% improvement and passed the read-performance checks."
+    },
+    {
+      "index_name": "imx_0164711c70d78c4d",
+      "schema": "benchmark",
+      "table": "orders",
+      "columns": [
+        "order_date"
+      ],
+      "baseline_ms": 9.01899,
+      "indexed_ms": 8.715160000000001,
+      "improvement_pct": 3.368780761482157,
+      "index_size_bytes": 712704,
+      "diagnostic_queries_using_index": [
+        "Q2",
+        "Q3",
+        "Q5"
+      ],
+      "eligible": false,
+      "reason": "Improvement is below the 5% threshold."
+    },
+    {
+      "index_name": "imx_c33156f3c3a2071e",
+      "schema": "benchmark",
+      "table": "orders",
+      "columns": [
+        "status"
+      ],
+      "baseline_ms": 9.253865,
+      "indexed_ms": 9.100055,
+      "improvement_pct": 1.6621163157232142,
+      "index_size_bytes": 712704,
+      "diagnostic_queries_using_index": [
+        "Q4"
+      ],
+      "eligible": false,
+      "reason": "Improvement is below the 5% threshold."
+    }
+  ],
+  "source_report": "index_comparison_20261116T064629713888Z.json",
+  "recorded_at_utc": "2026-11-16T06:46:29.713888+00:00",
+  "dataset_estimated_rows": {
+    "customers": 10000,
+    "orders": 100000
+  }
+}

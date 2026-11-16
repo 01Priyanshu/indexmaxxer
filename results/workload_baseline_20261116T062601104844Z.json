@@ -1,0 +1,1203 @@
+{
+  "experiment": "existing_indexes_baseline",
+  "recorded_at_utc": "2026-11-16T06:26:01.104844+00:00",
+  "client": {
+    "python": "3.12.10",
+    "os": "Windows-11-10.0.26300-SP0"
+  },
+  "metadata": {
+    "schema": "benchmark",
+    "tables": [
+      {
+        "table_name": "customers",
+        "estimated_rows": 10000,
+        "table_bytes": 565248,
+        "index_bytes": 245760,
+        "columns": [
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "customer_name",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "region",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "customers_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX customers_pkey ON benchmark.customers USING btree (customer_id)",
+            "key_columns": [
+              "customer_id"
+            ]
+          }
+        ]
+      },
+      {
+        "table_name": "orders",
+        "estimated_rows": 100000,
+        "table_bytes": 6488064,
+        "index_bytes": 2260992,
+        "columns": [
+          {
+            "column_name": "order_id",
+            "data_type": "bigint",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 100000
+          },
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": 9877.0,
+            "estimated_distinct_values": 9877
+          },
+          {
+            "column_name": "order_date",
+            "data_type": "date",
+            "null_frac": 0.0,
+            "n_distinct": 730.0,
+            "estimated_distinct_values": 730
+          },
+          {
+            "column_name": "status",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          },
+          {
+            "column_name": "total_amount",
+            "data_type": "numeric(10,2)",
+            "null_frac": 0.0,
+            "n_distinct": -0.53894,
+            "estimated_distinct_values": 53894
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "orders_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX orders_pkey ON benchmark.orders USING btree (order_id)",
+            "key_columns": [
+              "order_id"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "measurement": {
+    "protocol": {
+      "warmup_rounds": 2,
+      "measured_rounds": 7,
+      "shuffle_seed": 42,
+      "timing": "client execute + fetchall, milliseconds",
+      "cache_policy": "warmup rounds; no forced cache clearing",
+      "frequency_usage": "aggregation weights; equal repeats per query"
+    },
+    "round_order": [
+      [
+        "Q4",
+        "Q5",
+        "Q7",
+        "Q8",
+        "Q3",
+        "Q6",
+        "Q1",
+        "Q2"
+      ],
+      [
+        "Q4",
+        "Q8",
+        "Q3",
+        "Q1",
+        "Q5",
+        "Q7",
+        "Q6",
+        "Q2"
+      ],
+      [
+        "Q4",
+        "Q6",
+        "Q3",
+        "Q5",
+        "Q2",
+        "Q7",
+        "Q8",
+        "Q1"
+      ],
+      [
+        "Q3",
+        "Q2",
+        "Q1",
+        "Q8",
+        "Q5",
+        "Q7",
+        "Q6",
+        "Q4"
+      ],
+      [
+        "Q6",
+        "Q3",
+        "Q8",
+        "Q4",
+        "Q2",
+        "Q1",
+        "Q7",
+        "Q5"
+      ],
+      [
+        "Q6",
+        "Q4",
+        "Q7",
+        "Q5",
+        "Q1",
+        "Q8",
+        "Q2",
+        "Q3"
+      ],
+      [
+        "Q4",
+        "Q2",
+        "Q1",
+        "Q8",
+        "Q5",
+        "Q3",
+        "Q7",
+        "Q6"
+      ],
+      [
+        "Q6",
+        "Q8",
+        "Q7",
+        "Q3",
+        "Q5",
+        "Q1",
+        "Q4",
+        "Q2"
+      ],
+      [
+        "Q3",
+        "Q5",
+        "Q8",
+        "Q2",
+        "Q7",
+        "Q1",
+        "Q6",
+        "Q4"
+      ]
+    ],
+    "database_settings": {
+      "block_size": {
+        "value": "8192",
+        "unit": null
+      },
+      "effective_cache_size": {
+        "value": "524288",
+        "unit": "8kB"
+      },
+      "jit": {
+        "value": "on",
+        "unit": null
+      },
+      "max_parallel_workers_per_gather": {
+        "value": "2",
+        "unit": null
+      },
+      "random_page_cost": {
+        "value": "4",
+        "unit": null
+      },
+      "seq_page_cost": {
+        "value": "1",
+        "unit": null
+      },
+      "server_version": {
+        "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+        "unit": null
+      },
+      "shared_buffers": {
+        "value": "16384",
+        "unit": "8kB"
+      },
+      "track_io_timing": {
+        "value": "off",
+        "unit": null
+      },
+      "work_mem": {
+        "value": "4096",
+        "unit": "kB"
+      }
+    },
+    "queries": [
+      {
+        "id": "Q1",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2",
+        "frequency": 30,
+        "samples_ms": [
+          4.6406,
+          4.4284,
+          4.6276,
+          4.7285,
+          4.5395,
+          4.5789,
+          4.6961
+        ],
+        "row_count": 9,
+        "median_ms": 4.6276,
+        "min_ms": 4.4284,
+        "max_ms": 4.7285,
+        "explain": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.0,
+            "Total Cost": 2037.0,
+            "Plan Rows": 10,
+            "Plan Width": 30,
+            "Actual Startup Time": 0.732,
+            "Actual Total Time": 3.6,
+            "Actual Rows": 9,
+            "Actual Loops": 1,
+            "Filter": "(customer_id = 2)",
+            "Rows Removed by Filter": 99991,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.045,
+          "Triggers": [],
+          "Execution Time": 3.62
+        },
+        "plan_summary": {
+          "execution_time_ms": 3.62,
+          "planning_time_ms": 0.045,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Seq Scan",
+              "depth": 0,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 10,
+              "actual_rows_per_loop": 9,
+              "loops": 1,
+              "rows_removed_per_loop": 99991,
+              "filter": "(customer_id = 2)",
+              "index_condition": null
+            }
+          ],
+          "observations": [
+            "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+          ]
+        }
+      },
+      {
+        "id": "Q2",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2 AND \"orders\".\"order_date\" >= CAST('2026-01-01' AS DATE)",
+        "frequency": 20,
+        "samples_ms": [
+          5.323,
+          5.3466,
+          6.6858,
+          5.9026,
+          6.5931,
+          6.3773,
+          5.3986
+        ],
+        "row_count": 5,
+        "median_ms": 5.9026,
+        "min_ms": 5.323,
+        "max_ms": 6.6858,
+        "explain": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.0,
+            "Total Cost": 2287.0,
+            "Plan Rows": 5,
+            "Plan Width": 30,
+            "Actual Startup Time": 0.957,
+            "Actual Total Time": 4.514,
+            "Actual Rows": 5,
+            "Actual Loops": 1,
+            "Filter": "((order_date >= '2026-01-01'::date) AND (customer_id = 2))",
+            "Rows Removed by Filter": 99995,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.03,
+          "Triggers": [],
+          "Execution Time": 4.521
+        },
+        "plan_summary": {
+          "execution_time_ms": 4.521,
+          "planning_time_ms": 0.03,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Seq Scan",
+              "depth": 0,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 5,
+              "actual_rows_per_loop": 5,
+              "loops": 1,
+              "rows_removed_per_loop": 99995,
+              "filter": "((order_date >= '2026-01-01'::date) AND (customer_id = 2))",
+              "index_condition": null
+            }
+          ],
+          "observations": [
+            "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+          ]
+        }
+      },
+      {
+        "id": "Q3",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 3 AND \"orders\".\"order_date\" >= CAST('2026-06-01' AS DATE)",
+        "frequency": 10,
+        "samples_ms": [
+          5.2925,
+          5.0884,
+          5.1799,
+          5.1374,
+          5.4868,
+          5.3753,
+          5.4111
+        ],
+        "row_count": 2,
+        "median_ms": 5.2925,
+        "min_ms": 5.0884,
+        "max_ms": 5.4868,
+        "explain": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.0,
+            "Total Cost": 2287.0,
+            "Plan Rows": 3,
+            "Plan Width": 30,
+            "Actual Startup Time": 1.524,
+            "Actual Total Time": 4.735,
+            "Actual Rows": 2,
+            "Actual Loops": 1,
+            "Filter": "((order_date >= '2026-06-01'::date) AND (customer_id = 3))",
+            "Rows Removed by Filter": 99998,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.031,
+          "Triggers": [],
+          "Execution Time": 4.743
+        },
+        "plan_summary": {
+          "execution_time_ms": 4.743,
+          "planning_time_ms": 0.031,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Seq Scan",
+              "depth": 0,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 3,
+              "actual_rows_per_loop": 2,
+              "loops": 1,
+              "rows_removed_per_loop": 99998,
+              "filter": "((order_date >= '2026-06-01'::date) AND (customer_id = 3))",
+              "index_condition": null
+            }
+          ],
+          "observations": [
+            "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+          ]
+        }
+      },
+      {
+        "id": "Q4",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"status\" = 'delivered'",
+        "frequency": 10,
+        "samples_ms": [
+          38.7755,
+          36.5389,
+          37.8866,
+          37.2995,
+          35.4311,
+          38.5042,
+          37.9045
+        ],
+        "row_count": 24883,
+        "median_ms": 37.8866,
+        "min_ms": 35.4311,
+        "max_ms": 38.7755,
+        "explain": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.0,
+            "Total Cost": 2037.0,
+            "Plan Rows": 24883,
+            "Plan Width": 30,
+            "Actual Startup Time": 0.005,
+            "Actual Total Time": 6.357,
+            "Actual Rows": 24883,
+            "Actual Loops": 1,
+            "Filter": "(status = 'delivered'::text)",
+            "Rows Removed by Filter": 75117,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.03,
+          "Triggers": [],
+          "Execution Time": 7.093
+        },
+        "plan_summary": {
+          "execution_time_ms": 7.093,
+          "planning_time_ms": 0.03,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Seq Scan",
+              "depth": 0,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 24883,
+              "actual_rows_per_loop": 24883,
+              "loops": 1,
+              "rows_removed_per_loop": 75117,
+              "filter": "(status = 'delivered'::text)",
+              "index_condition": null
+            }
+          ],
+          "observations": []
+        }
+      },
+      {
+        "id": "Q5",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"order_date\" >= CAST('2026-06-01' AS DATE) AND \"orders\".\"order_date\" < CAST('2026-06-08' AS DATE)",
+        "frequency": 10,
+        "samples_ms": [
+          6.3071,
+          6.3725,
+          6.6695,
+          6.2496,
+          6.257,
+          6.1258,
+          6.2188
+        ],
+        "row_count": 954,
+        "median_ms": 6.257,
+        "min_ms": 6.1258,
+        "max_ms": 6.6695,
+        "explain": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.0,
+            "Total Cost": 2287.0,
+            "Plan Rows": 990,
+            "Plan Width": 30,
+            "Actual Startup Time": 0.011,
+            "Actual Total Time": 4.173,
+            "Actual Rows": 954,
+            "Actual Loops": 1,
+            "Filter": "((order_date >= '2026-06-01'::date) AND (order_date < '2026-06-08'::date))",
+            "Rows Removed by Filter": 99046,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.029,
+          "Triggers": [],
+          "Execution Time": 4.207
+        },
+        "plan_summary": {
+          "execution_time_ms": 4.207,
+          "planning_time_ms": 0.029,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Seq Scan",
+              "depth": 0,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 990,
+              "actual_rows_per_loop": 954,
+              "loops": 1,
+              "rows_removed_per_loop": 99046,
+              "filter": "((order_date >= '2026-06-01'::date) AND (order_date < '2026-06-08'::date))",
+              "index_condition": null
+            }
+          ],
+          "observations": [
+            "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+          ]
+        }
+      },
+      {
+        "id": "Q6",
+        "sql": "SELECT \"o\".\"order_id\" AS \"order_id\", \"o\".\"total_amount\" AS \"total_amount\", \"c\".\"region\" AS \"region\" FROM \"benchmark\".\"orders\" AS \"o\" JOIN \"benchmark\".\"customers\" AS \"c\" ON \"o\".\"customer_id\" = \"c\".\"customer_id\" WHERE \"c\".\"customer_id\" BETWEEN 1 AND 100",
+        "frequency": 10,
+        "samples_ms": [
+          8.1341,
+          7.0971,
+          8.6205,
+          6.9362,
+          6.9586,
+          7.2532,
+          6.9803
+        ],
+        "row_count": 974,
+        "median_ms": 7.0971,
+        "min_ms": 6.9362,
+        "max_ms": 8.6205,
+        "explain": {
+          "Plan": {
+            "Node Type": "Hash Join",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Join Type": "Inner",
+            "Startup Cost": 11.54,
+            "Total Cost": 2061.15,
+            "Plan Rows": 1000,
+            "Plan Width": 19,
+            "Actual Startup Time": 0.062,
+            "Actual Total Time": 10.68,
+            "Actual Rows": 974,
+            "Actual Loops": 1,
+            "Inner Unique": true,
+            "Hash Cond": "(o.customer_id = c.customer_id)",
+            "Shared Hit Blocks": 790,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "o",
+                "Startup Cost": 0.0,
+                "Total Cost": 1787.0,
+                "Plan Rows": 100000,
+                "Plan Width": 18,
+                "Actual Startup Time": 0.003,
+                "Actual Total Time": 4.394,
+                "Actual Rows": 100000,
+                "Actual Loops": 1,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              {
+                "Node Type": "Hash",
+                "Parent Relationship": "Inner",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 10.29,
+                "Total Cost": 10.29,
+                "Plan Rows": 100,
+                "Plan Width": 9,
+                "Actual Startup Time": 0.038,
+                "Actual Total Time": 0.039,
+                "Actual Rows": 100,
+                "Actual Loops": 1,
+                "Hash Buckets": 1024,
+                "Original Hash Buckets": 1024,
+                "Hash Batches": 1,
+                "Original Hash Batches": 1,
+                "Peak Memory Usage": 13,
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "customers_pkey",
+                    "Relation Name": "customers",
+                    "Alias": "c",
+                    "Startup Cost": 0.29,
+                    "Total Cost": 10.29,
+                    "Plan Rows": 100,
+                    "Plan Width": 9,
+                    "Actual Startup Time": 0.006,
+                    "Actual Total Time": 0.017,
+                    "Actual Rows": 100,
+                    "Actual Loops": 1,
+                    "Index Cond": "((customer_id >= 1) AND (customer_id <= 100))",
+                    "Rows Removed by Index Recheck": 0,
+                    "Shared Hit Blocks": 3,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 9,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.136,
+          "Triggers": [],
+          "Execution Time": 10.722
+        },
+        "plan_summary": {
+          "execution_time_ms": 10.722,
+          "planning_time_ms": 0.136,
+          "shared_hit_blocks": 790,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Hash Join",
+              "depth": 0,
+              "table": null,
+              "index": null,
+              "join_type": "Inner",
+              "estimated_rows_per_loop": 1000,
+              "actual_rows_per_loop": 974,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Seq Scan",
+              "depth": 1,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 100000,
+              "actual_rows_per_loop": 100000,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Hash",
+              "depth": 1,
+              "table": null,
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 100,
+              "actual_rows_per_loop": 100,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Index Scan",
+              "depth": 2,
+              "table": "customers",
+              "index": "customers_pkey",
+              "join_type": null,
+              "estimated_rows_per_loop": 100,
+              "actual_rows_per_loop": 100,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": "((customer_id >= 1) AND (customer_id <= 100))"
+            }
+          ],
+          "observations": []
+        }
+      },
+      {
+        "id": "Q7",
+        "sql": "SELECT * FROM \"benchmark\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" = 2 ORDER BY \"orders\".\"order_date\" DESC LIMIT 20",
+        "frequency": 5,
+        "samples_ms": [
+          4.3917,
+          4.7488,
+          5.012,
+          5.6444,
+          4.6188,
+          4.4723,
+          4.439
+        ],
+        "row_count": 9,
+        "median_ms": 4.6188,
+        "min_ms": 4.3917,
+        "max_ms": 5.6444,
+        "explain": {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 2037.17,
+            "Total Cost": 2037.19,
+            "Plan Rows": 10,
+            "Plan Width": 30,
+            "Actual Startup Time": 3.514,
+            "Actual Total Time": 3.516,
+            "Actual Rows": 9,
+            "Actual Loops": 1,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 2037.17,
+                "Total Cost": 2037.19,
+                "Plan Rows": 10,
+                "Plan Width": 30,
+                "Actual Startup Time": 3.513,
+                "Actual Total Time": 3.514,
+                "Actual Rows": 9,
+                "Actual Loops": 1,
+                "Sort Key": [
+                  "order_date DESC"
+                ],
+                "Sort Method": "quicksort",
+                "Sort Space Used": 25,
+                "Sort Space Type": "Memory",
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "orders",
+                    "Alias": "orders",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 2037.0,
+                    "Plan Rows": 10,
+                    "Plan Width": 30,
+                    "Actual Startup Time": 0.701,
+                    "Actual Total Time": 3.507,
+                    "Actual Rows": 9,
+                    "Actual Loops": 1,
+                    "Filter": "(customer_id = 2)",
+                    "Rows Removed by Filter": 99991,
+                    "Shared Hit Blocks": 787,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.036,
+          "Triggers": [],
+          "Execution Time": 3.523
+        },
+        "plan_summary": {
+          "execution_time_ms": 3.523,
+          "planning_time_ms": 0.036,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Limit",
+              "depth": 0,
+              "table": null,
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 10,
+              "actual_rows_per_loop": 9,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Sort",
+              "depth": 1,
+              "table": null,
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 10,
+              "actual_rows_per_loop": 9,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Seq Scan",
+              "depth": 2,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 10,
+              "actual_rows_per_loop": 9,
+              "loops": 1,
+              "rows_removed_per_loop": 99991,
+              "filter": "(customer_id = 2)",
+              "index_condition": null
+            }
+          ],
+          "observations": [
+            "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+          ]
+        }
+      },
+      {
+        "id": "Q8",
+        "sql": "SELECT \"orders\".\"status\" AS \"status\", COUNT(*) AS \"order_count\", SUM(\"orders\".\"total_amount\") AS \"total_sales\" FROM \"benchmark\".\"orders\" AS \"orders\" GROUP BY \"orders\".\"status\"",
+        "frequency": 5,
+        "samples_ms": [
+          18.7796,
+          18.4032,
+          18.5587,
+          19.0111,
+          18.8953,
+          18.4392,
+          18.7988
+        ],
+        "row_count": 4,
+        "median_ms": 18.7796,
+        "min_ms": 18.4032,
+        "max_ms": 19.0111,
+        "explain": {
+          "Plan": {
+            "Node Type": "Aggregate",
+            "Strategy": "Hashed",
+            "Partial Mode": "Simple",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 2537.0,
+            "Total Cost": 2537.05,
+            "Plan Rows": 4,
+            "Plan Width": 48,
+            "Actual Startup Time": 22.279,
+            "Actual Total Time": 22.281,
+            "Actual Rows": 4,
+            "Actual Loops": 1,
+            "Group Key": [
+              "status"
+            ],
+            "Planned Partitions": 0,
+            "HashAgg Batches": 1,
+            "Peak Memory Usage": 24,
+            "Disk Usage": 0,
+            "Shared Hit Blocks": 787,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 1787.0,
+                "Plan Rows": 100000,
+                "Plan Width": 14,
+                "Actual Startup Time": 0.003,
+                "Actual Total Time": 4.2,
+                "Actual Rows": 100000,
+                "Actual Loops": 1,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.028,
+          "Triggers": [],
+          "Execution Time": 22.295
+        },
+        "plan_summary": {
+          "execution_time_ms": 22.295,
+          "planning_time_ms": 0.028,
+          "shared_hit_blocks": 787,
+          "shared_read_blocks": 0,
+          "nodes": [
+            {
+              "node_type": "Aggregate",
+              "depth": 0,
+              "table": null,
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 4,
+              "actual_rows_per_loop": 4,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            },
+            {
+              "node_type": "Seq Scan",
+              "depth": 1,
+              "table": "orders",
+              "index": null,
+              "join_type": null,
+              "estimated_rows_per_loop": 100000,
+              "actual_rows_per_loop": 100000,
+              "loops": 1,
+              "rows_removed_per_loop": 0,
+              "filter": null,
+              "index_condition": null
+            }
+          ],
+          "observations": []
+        }
+      }
+    ],
+    "weighted_mean_of_medians_ms": 9.39204
+  }
+}
