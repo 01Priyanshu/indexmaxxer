@@ -1,3 +1,4 @@
+import WriteCosts from './WriteCosts.jsx'
 import QueryDetails from './QueryDetails.jsx'
 import { useEffect, useState } from 'react'
 import './index.css'
@@ -290,6 +291,8 @@ export default function App() {
               </details>
             </section>
 
+            <WriteCosts report={data} />
+
             <QueryDetails key={data.source_report} report={data} />
 
             <p className="footer-note">
@@ -302,5 +305,6 @@ export default function App() {
     </>
   )
 }
+
 
 

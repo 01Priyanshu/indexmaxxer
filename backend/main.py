@@ -4,7 +4,7 @@ import psycopg2
 from fastapi import FastAPI, HTTPException
 
 from backend.db import PROJECT_ROOT, get_connection
-from backend.recommendations import load_latest_recommendations
+from backend.write_results import load_recommendations_with_write_cost as load_latest_recommendations
 
 app = FastAPI(title="IndexMaxxer", version="0.1.0")
 logger = logging.getLogger(__name__)
@@ -55,3 +55,4 @@ def recommendations():
 from backend.comparison_api import router as comparison_router
 
 app.include_router(comparison_router)
+

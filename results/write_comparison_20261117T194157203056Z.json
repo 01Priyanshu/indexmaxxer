@@ -1,0 +1,597 @@
+{
+  "experiment": "individual_index_write_comparison",
+  "recorded_at_utc": "2026-11-17T19:41:57.203056+00:00",
+  "source_read_report": "index_comparison_20261116T064629713888Z.json",
+  "candidate": {
+    "index_name": "imx_b37471c5a98591d5",
+    "schema": "benchmark",
+    "table": "orders",
+    "columns": [
+      "customer_id"
+    ],
+    "baseline_ms": 9.098065,
+    "indexed_ms": 6.220644999999999,
+    "improvement_pct": 31.62672502339784,
+    "index_size_bytes": 942080,
+    "diagnostic_queries_using_index": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q7"
+    ],
+    "eligible": true,
+    "reason": "Measured 31.6% improvement and passed the read-performance checks."
+  },
+  "status": "complete",
+  "cleanup_verified": true,
+  "scratch_schema": "imx_write_cb878097ce7c4ca3be8ea007f1928551",
+  "batch_rows": 1000,
+  "read_dataset_estimated_rows": {
+    "customers": 10000,
+    "orders": 100000
+  },
+  "client": {
+    "python": "3.12.10",
+    "os": "Windows-11-10.0.26300-SP0"
+  },
+  "protocol": {
+    "warmup_rounds": 2,
+    "measured_rounds": 7,
+    "shuffle_seed": 42,
+    "timing": "Client execute plus commit; milliseconds per batch",
+    "baseline_indexes": "Primary key on order_id only",
+    "indexed_layout": "Primary key plus the selected candidate B-tree",
+    "table_reset": "Fresh committed logged table for every sample",
+    "constraints": "Primary key, NOT NULL columns, customer foreign key",
+    "insert_ids": "Explicit IDs; sequence allocation is not measured",
+    "fillfactor": 100,
+    "trial_autovacuum": false,
+    "cache_policy": "No forced cache clearing; setup outside timing",
+    "order": "Shuffled operations; alternating baseline/indexed order",
+    "overhead": "100 * (indexed median / baseline median - 1)"
+  },
+  "samples": [
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 45.9727,
+      "rows_affected": 1000
+    },
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 37.3089,
+      "rows_affected": 1000
+    },
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.3403,
+      "rows_affected": 1000
+    },
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 11.7263,
+      "rows_affected": 1000
+    },
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 10.0807,
+      "rows_affected": 1000
+    },
+    {
+      "round": 1,
+      "warmup": true,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 11.8235,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 12.7178,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 10.2303,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 16.8528,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 17.0461,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 12.493,
+      "rows_affected": 1000
+    },
+    {
+      "round": 2,
+      "warmup": true,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.9288,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 14.8828,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 16.449,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 8.8072,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 10.3919,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.3905,
+      "rows_affected": 1000
+    },
+    {
+      "round": 3,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 12.4203,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 18.7999,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 13.7284,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 116.1902,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 9.1412,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 14.409,
+      "rows_affected": 1000
+    },
+    {
+      "round": 4,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 12.2703,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 16.0635,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 16.991,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 13.1444,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 16.209,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 10.6815,
+      "rows_affected": 1000
+    },
+    {
+      "round": 5,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 9.9758,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 12.9353,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 12.3557,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 21.0395,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 19.5721,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 10.0277,
+      "rows_affected": 1000
+    },
+    {
+      "round": 6,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 11.2375,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 13.7713,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 91.7054,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 29.7842,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 180.6068,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.2774,
+      "rows_affected": 1000
+    },
+    {
+      "round": 7,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 12.8455,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 16.3545,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 14.6047,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 11.6734,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 8.46,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 12.4614,
+      "rows_affected": 1000
+    },
+    {
+      "round": 8,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.3697,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "baseline",
+      "elapsed_ms": 16.8842,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "update_customer_id",
+      "layout": "indexed",
+      "elapsed_ms": 19.214,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "baseline",
+      "elapsed_ms": 9.4878,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "update_total_amount",
+      "layout": "indexed",
+      "elapsed_ms": 10.9617,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "baseline",
+      "elapsed_ms": 11.3032,
+      "rows_affected": 1000
+    },
+    {
+      "round": 9,
+      "warmup": false,
+      "operation": "insert_batch",
+      "layout": "indexed",
+      "elapsed_ms": 13.5509,
+      "rows_affected": 1000
+    }
+  ],
+  "database_settings": {
+    "block_size": {
+      "value": "8192",
+      "unit": null
+    },
+    "fsync": {
+      "value": "on",
+      "unit": null
+    },
+    "full_page_writes": {
+      "value": "on",
+      "unit": null
+    },
+    "server_version": {
+      "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+      "unit": null
+    },
+    "shared_buffers": {
+      "value": "16384",
+      "unit": "8kB"
+    },
+    "synchronous_commit": {
+      "value": "on",
+      "unit": null
+    },
+    "wal_level": {
+      "value": "replica",
+      "unit": null
+    },
+    "work_mem": {
+      "value": "4096",
+      "unit": "kB"
+    }
+  },
+  "source_rows": 100000,
+  "customer_rows": 10000,
+  "operations": [
+    {
+      "operation": "insert_batch",
+      "baseline_samples_ms": [
+        11.3905,
+        12.2703,
+        13.1444,
+        12.3557,
+        11.2774,
+        11.3697,
+        11.3032
+      ],
+      "indexed_samples_ms": [
+        12.4203,
+        14.409,
+        16.209,
+        12.9353,
+        12.8455,
+        12.4614,
+        13.5509
+      ],
+      "baseline_median_ms": 11.3905,
+      "indexed_median_ms": 12.9353,
+      "overhead_pct": 13.56217900882315
+    },
+    {
+      "operation": "update_customer_id",
+      "baseline_samples_ms": [
+        14.8828,
+        13.7284,
+        16.0635,
+        19.5721,
+        13.7713,
+        14.6047,
+        16.8842
+      ],
+      "indexed_samples_ms": [
+        16.449,
+        18.7999,
+        16.991,
+        21.0395,
+        91.7054,
+        16.3545,
+        19.214
+      ],
+      "baseline_median_ms": 14.8828,
+      "indexed_median_ms": 18.7999,
+      "overhead_pct": 26.31964415298198
+    },
+    {
+      "operation": "update_total_amount",
+      "baseline_samples_ms": [
+        8.8072,
+        9.1412,
+        10.6815,
+        11.2375,
+        29.7842,
+        8.46,
+        9.4878
+      ],
+      "indexed_samples_ms": [
+        10.3919,
+        116.1902,
+        9.9758,
+        10.0277,
+        180.6068,
+        11.6734,
+        10.9617
+      ],
+      "baseline_median_ms": 9.4878,
+      "indexed_median_ms": 10.9617,
+      "overhead_pct": 15.534686650224504
+    }
+  ]
+}
