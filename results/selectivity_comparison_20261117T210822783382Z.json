@@ -1,0 +1,3868 @@
+{
+  "experiment": "customer_index_predicate_selectivity",
+  "recorded_at_utc": "2026-11-17T21:08:22.783382+00:00",
+  "status": "complete",
+  "cleanup_verified": true,
+  "experiment_schema_removed": true,
+  "source_metadata_before": {
+    "schema": "benchmark",
+    "tables": [
+      {
+        "table_name": "customers",
+        "estimated_rows": 10000,
+        "table_bytes": 565248,
+        "index_bytes": 245760,
+        "columns": [
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "customer_name",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "region",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "customers_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX customers_pkey ON benchmark.customers USING btree (customer_id)",
+            "key_columns": [
+              "customer_id"
+            ]
+          }
+        ]
+      },
+      {
+        "table_name": "orders",
+        "estimated_rows": 100000,
+        "table_bytes": 6488064,
+        "index_bytes": 2260992,
+        "columns": [
+          {
+            "column_name": "order_id",
+            "data_type": "bigint",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 100000
+          },
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": 9877.0,
+            "estimated_distinct_values": 9877
+          },
+          {
+            "column_name": "order_date",
+            "data_type": "date",
+            "null_frac": 0.0,
+            "n_distinct": 730.0,
+            "estimated_distinct_values": 730
+          },
+          {
+            "column_name": "status",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          },
+          {
+            "column_name": "total_amount",
+            "data_type": "numeric(10,2)",
+            "null_frac": 0.0,
+            "n_distinct": -0.53894,
+            "estimated_distinct_values": 53894
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "orders_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX orders_pkey ON benchmark.orders USING btree (order_id)",
+            "key_columns": [
+              "order_id"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scratch_schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+  "orders_rows": 100000,
+  "customer_rows": 10000,
+  "query_specs": [
+    {
+      "id": "S1",
+      "target_match_pct": 0.1,
+      "customer_id_upper_bound": 10
+    },
+    {
+      "id": "S2",
+      "target_match_pct": 1.0,
+      "customer_id_upper_bound": 100
+    },
+    {
+      "id": "S3",
+      "target_match_pct": 10.0,
+      "customer_id_upper_bound": 1000
+    },
+    {
+      "id": "S4",
+      "target_match_pct": 50.0,
+      "customer_id_upper_bound": 5000
+    }
+  ],
+  "client": {
+    "python": "3.12.10",
+    "os": "Windows-11-10.0.26300-SP0"
+  },
+  "protocol": {
+    "data_seed": 0.42,
+    "dataset": "Isolated synthetic orders/customers using seed_data.sql generation rules",
+    "baseline": "Existing primary-key indexes only",
+    "candidate": "Single-column B-tree on orders(customer_id)",
+    "query_family": "SELECT * FROM orders WHERE customer_id <= upper_bound",
+    "selectivity": "Actual returned rows divided by total orders; targets assume uniform customer IDs",
+    "paired_trials": 3,
+    "warmup_rounds_per_phase": 2,
+    "measured_rounds_per_phase": 7,
+    "phase_order": "Baseline first in trials 1 and 3; indexed first in trial 2",
+    "measurement": "Per-query client execute + fetchall medians, in milliseconds",
+    "summary": "Median across trials; gain is the median of paired query percentages",
+    "diagnostics": "Index usage and scan types from separate EXPLAIN ANALYZE BUFFERS runs",
+    "query_weights": "Equal experimental weights; pooled scores are not the original workload score",
+    "cache_policy": "Warmups; no forced cache clearing",
+    "optimizer": "Planner chooses freely; no scan method is forced",
+    "trial_autovacuum": false,
+    "statistics": "Explicit ANALYZE after data generation",
+    "scope": "Read performance at four target match fractions; write costs excluded"
+  },
+  "results": [
+    {
+      "phase_order": [
+        "baseline",
+        "indexed"
+      ],
+      "baseline": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 43,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S3",
+            "S4",
+            "S2",
+            "S1"
+          ],
+          [
+            "S3",
+            "S1",
+            "S2",
+            "S4"
+          ],
+          [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          [
+            "S4",
+            "S2",
+            "S3",
+            "S1"
+          ],
+          [
+            "S1",
+            "S2",
+            "S4",
+            "S3"
+          ],
+          [
+            "S2",
+            "S3",
+            "S1",
+            "S4"
+          ],
+          [
+            "S3",
+            "S2",
+            "S4",
+            "S1"
+          ],
+          [
+            "S4",
+            "S3",
+            "S1",
+            "S2"
+          ],
+          [
+            "S3",
+            "S2",
+            "S1",
+            "S4"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              6.9339,
+              6.3718,
+              5.8973,
+              6.3046,
+              8.0301,
+              5.7719,
+              5.2383
+            ],
+            "row_count": 90,
+            "median_ms": 6.3046,
+            "min_ms": 5.2383,
+            "max_ms": 8.0301,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.035,
+                "Actual Total Time": 4.219,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 10)",
+                "Rows Removed by Filter": 99910,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.063,
+              "Triggers": [],
+              "Execution Time": 4.234
+            },
+            "plan_summary": {
+              "execution_time_ms": 4.234,
+              "planning_time_ms": 0.063,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99910,
+                  "filter": "(customer_id <= 10)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              6.3287,
+              9.0437,
+              6.3405,
+              6.7651,
+              8.3072,
+              6.2946,
+              6.6255
+            ],
+            "row_count": 974,
+            "median_ms": 6.6255,
+            "min_ms": 6.2946,
+            "max_ms": 9.0437,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.014,
+                "Actual Total Time": 4.41,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 100)",
+                "Rows Removed by Filter": 99026,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.036,
+              "Triggers": [],
+              "Execution Time": 4.449
+            },
+            "plan_summary": {
+              "execution_time_ms": 4.449,
+              "planning_time_ms": 0.036,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99026,
+                  "filter": "(customer_id <= 100)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              17.8456,
+              21.8595,
+              21.5378,
+              18.6667,
+              20.882,
+              21.3248,
+              16.8535
+            ],
+            "row_count": 9817,
+            "median_ms": 20.882,
+            "min_ms": 16.8535,
+            "max_ms": 21.8595,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.007,
+                "Actual Total Time": 4.648,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 1000)",
+                "Rows Removed by Filter": 90183,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.025,
+              "Triggers": [],
+              "Execution Time": 4.966
+            },
+            "plan_summary": {
+              "execution_time_ms": 4.966,
+              "planning_time_ms": 0.025,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 90183,
+                  "filter": "(customer_id <= 1000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              76.4591,
+              79.5438,
+              74.2134,
+              76.575,
+              80.6101,
+              71.3076,
+              66.5314
+            ],
+            "row_count": 49845,
+            "median_ms": 76.4591,
+            "min_ms": 66.5314,
+            "max_ms": 80.6101,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.008,
+                "Actual Total Time": 6.212,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.03,
+              "Triggers": [],
+              "Execution Time": 7.722
+            },
+            "plan_summary": {
+              "execution_time_ms": 7.722,
+              "planning_time_ms": 0.03,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 27.567800000000002
+      },
+      "indexed": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 43,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S3",
+            "S4",
+            "S2",
+            "S1"
+          ],
+          [
+            "S3",
+            "S1",
+            "S2",
+            "S4"
+          ],
+          [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          [
+            "S4",
+            "S2",
+            "S3",
+            "S1"
+          ],
+          [
+            "S1",
+            "S2",
+            "S4",
+            "S3"
+          ],
+          [
+            "S2",
+            "S3",
+            "S1",
+            "S4"
+          ],
+          [
+            "S3",
+            "S2",
+            "S4",
+            "S1"
+          ],
+          [
+            "S4",
+            "S3",
+            "S1",
+            "S2"
+          ],
+          [
+            "S3",
+            "S2",
+            "S1",
+            "S4"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              2.653,
+              1.3551,
+              1.1312,
+              1.3969,
+              2.6676,
+              1.5037,
+              0.9839
+            ],
+            "row_count": 90,
+            "median_ms": 1.3969,
+            "min_ms": 0.9839,
+            "max_ms": 2.6676,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 5.05,
+                "Total Cost": 282.37,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.018,
+                "Actual Total Time": 0.112,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 10)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 85,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 87,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.03,
+                    "Plan Rows": 98,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.006,
+                    "Actual Total Time": 0.006,
+                    "Actual Rows": 90,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 10)",
+                    "Shared Hit Blocks": 2,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.113,
+              "Triggers": [],
+              "Execution Time": 0.128
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.128,
+              "planning_time_ms": 0.113,
+              "shared_hit_blocks": 87,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 10)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              2.6781,
+              3.7832,
+              2.3365,
+              2.6024,
+              3.0374,
+              2.4756,
+              2.8591
+            ],
+            "row_count": 974,
+            "median_ms": 2.6781,
+            "min_ms": 2.3365,
+            "max_ms": 3.7832,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 15.87,
+                "Total Cost": 856.69,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.092,
+                "Actual Total Time": 0.56,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 100)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 561,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 564,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 15.63,
+                    "Plan Rows": 978,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.043,
+                    "Actual Total Time": 0.044,
+                    "Actual Rows": 974,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 100)",
+                    "Shared Hit Blocks": 3,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.052,
+              "Triggers": [],
+              "Execution Time": 0.598
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.598,
+              "planning_time_ms": 0.052,
+              "shared_hit_blocks": 564,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 100)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              13.8659,
+              14.7275,
+              15.2472,
+              13.9017,
+              17.1728,
+              15.4073,
+              14.814
+            ],
+            "row_count": 9817,
+            "median_ms": 14.814,
+            "min_ms": 13.8659,
+            "max_ms": 17.1728,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 126.41,
+                "Total Cost": 1039.41,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.38,
+                "Actual Total Time": 1.977,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 1000)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 787,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 800,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 123.89,
+                    "Plan Rows": 10080,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.312,
+                    "Actual Total Time": 0.313,
+                    "Actual Rows": 9817,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 1000)",
+                    "Shared Hit Blocks": 13,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.035,
+              "Triggers": [],
+              "Execution Time": 2.298
+            },
+            "plan_summary": {
+              "execution_time_ms": 2.298,
+              "planning_time_ms": 0.035,
+              "shared_hit_blocks": 800,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 1000)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              73.8175,
+              74.8075,
+              66.8401,
+              64.3003,
+              64.9414,
+              63.2582,
+              71.6885
+            ],
+            "row_count": 49845,
+            "median_ms": 66.8401,
+            "min_ms": 63.2582,
+            "max_ms": 74.8075,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.01,
+                "Actual Total Time": 6.158,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.04,
+              "Triggers": [],
+              "Execution Time": 7.689
+            },
+            "plan_summary": {
+              "execution_time_ms": 7.689,
+              "planning_time_ms": 0.04,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 21.432275
+      },
+      "improvement_pct": 22.256128526759483,
+      "added_indexes": [
+        {
+          "candidate": {
+            "index_name": "imx_9bac017f93060cad",
+            "schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+            "table": "orders",
+            "columns": [
+              "customer_id"
+            ],
+            "source_query_ids": [
+              "S1",
+              "S2",
+              "S3",
+              "S4"
+            ],
+            "source_frequency": 4,
+            "estimated_table_rows": 100000,
+            "estimated_distinct_values": {
+              "customer_id": 9847
+            }
+          },
+          "index_size_bytes": 942080,
+          "index_build_execute_ms": 34.2567
+        }
+      ],
+      "total_added_index_bytes": 942080,
+      "queries_using_added_indexes": {
+        "imx_9bac017f93060cad": [
+          "S1",
+          "S2",
+          "S3"
+        ]
+      },
+      "row_counts_match": true,
+      "trial": 1
+    },
+    {
+      "phase_order": [
+        "indexed",
+        "baseline"
+      ],
+      "baseline": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 44,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S2",
+            "S1",
+            "S3",
+            "S4"
+          ],
+          [
+            "S3",
+            "S1",
+            "S4",
+            "S2"
+          ],
+          [
+            "S2",
+            "S4",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ],
+          [
+            "S3",
+            "S2",
+            "S4",
+            "S1"
+          ],
+          [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          [
+            "S4",
+            "S1",
+            "S2",
+            "S3"
+          ],
+          [
+            "S4",
+            "S1",
+            "S2",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              12.4909,
+              10.1455,
+              11.4411,
+              10.1992,
+              9.6,
+              13.6974,
+              9.593
+            ],
+            "row_count": 90,
+            "median_ms": 10.1992,
+            "min_ms": 9.593,
+            "max_ms": 13.6974,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.058,
+                "Actual Total Time": 7.519,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 10)",
+                "Rows Removed by Filter": 99910,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.07,
+              "Triggers": [],
+              "Execution Time": 7.549
+            },
+            "plan_summary": {
+              "execution_time_ms": 7.549,
+              "planning_time_ms": 0.07,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99910,
+                  "filter": "(customer_id <= 10)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              13.7921,
+              12.1095,
+              12.2062,
+              10.4132,
+              12.1505,
+              10.8696,
+              10.3405
+            ],
+            "row_count": 974,
+            "median_ms": 12.1095,
+            "min_ms": 10.3405,
+            "max_ms": 13.7921,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.02,
+                "Actual Total Time": 5.91,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 100)",
+                "Rows Removed by Filter": 99026,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.073,
+              "Triggers": [],
+              "Execution Time": 5.979
+            },
+            "plan_summary": {
+              "execution_time_ms": 5.979,
+              "planning_time_ms": 0.073,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99026,
+                  "filter": "(customer_id <= 100)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              38.256,
+              38.7627,
+              36.3107,
+              29.8633,
+              26.3048,
+              30.4736,
+              34.3958
+            ],
+            "row_count": 9817,
+            "median_ms": 34.3958,
+            "min_ms": 26.3048,
+            "max_ms": 38.7627,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.012,
+                "Actual Total Time": 6.917,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 1000)",
+                "Rows Removed by Filter": 90183,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.059,
+              "Triggers": [],
+              "Execution Time": 7.362
+            },
+            "plan_summary": {
+              "execution_time_ms": 7.362,
+              "planning_time_ms": 0.059,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 90183,
+                  "filter": "(customer_id <= 1000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              137.372,
+              123.5205,
+              120.9202,
+              124.6276,
+              118.2322,
+              112.8296,
+              128.1117
+            ],
+            "row_count": 49845,
+            "median_ms": 123.5205,
+            "min_ms": 112.8296,
+            "max_ms": 137.372,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.01,
+                "Actual Total Time": 12.241,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.044,
+              "Triggers": [],
+              "Execution Time": 14.833
+            },
+            "plan_summary": {
+              "execution_time_ms": 14.833,
+              "planning_time_ms": 0.044,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 45.05625
+      },
+      "indexed": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 44,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S2",
+            "S1",
+            "S3",
+            "S4"
+          ],
+          [
+            "S3",
+            "S1",
+            "S4",
+            "S2"
+          ],
+          [
+            "S2",
+            "S4",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ],
+          [
+            "S3",
+            "S2",
+            "S4",
+            "S1"
+          ],
+          [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          [
+            "S4",
+            "S1",
+            "S2",
+            "S3"
+          ],
+          [
+            "S4",
+            "S1",
+            "S2",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              2.5069,
+              2.2815,
+              2.7306,
+              1.3794,
+              2.878,
+              2.752,
+              1.9356
+            ],
+            "row_count": 90,
+            "median_ms": 2.5069,
+            "min_ms": 1.3794,
+            "max_ms": 2.878,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 5.05,
+                "Total Cost": 282.37,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.022,
+                "Actual Total Time": 0.142,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 10)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 85,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 87,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.03,
+                    "Plan Rows": 98,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.008,
+                    "Actual Total Time": 0.008,
+                    "Actual Rows": 90,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 10)",
+                    "Shared Hit Blocks": 2,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.07,
+              "Triggers": [],
+              "Execution Time": 0.16
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.16,
+              "planning_time_ms": 0.07,
+              "shared_hit_blocks": 87,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 10)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              2.7687,
+              3.2523,
+              3.8933,
+              3.0276,
+              4.3244,
+              3.402,
+              4.4654
+            ],
+            "row_count": 974,
+            "median_ms": 3.402,
+            "min_ms": 2.7687,
+            "max_ms": 4.4654,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 15.87,
+                "Total Cost": 856.69,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.117,
+                "Actual Total Time": 0.779,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 100)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 561,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 564,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 15.63,
+                    "Plan Rows": 978,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.062,
+                    "Actual Total Time": 0.062,
+                    "Actual Rows": 974,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 100)",
+                    "Shared Hit Blocks": 3,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.052,
+              "Triggers": [],
+              "Execution Time": 0.829
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.829,
+              "planning_time_ms": 0.052,
+              "shared_hit_blocks": 564,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 100)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              16.3376,
+              17.7189,
+              19.6018,
+              17.6546,
+              24.0825,
+              25.4168,
+              24.896
+            ],
+            "row_count": 9817,
+            "median_ms": 19.6018,
+            "min_ms": 16.3376,
+            "max_ms": 25.4168,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 126.41,
+                "Total Cost": 1039.41,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.436,
+                "Actual Total Time": 3.057,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 1000)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 787,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 800,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 123.89,
+                    "Plan Rows": 10080,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.356,
+                    "Actual Total Time": 0.357,
+                    "Actual Rows": 9817,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 1000)",
+                    "Shared Hit Blocks": 13,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.052,
+              "Triggers": [],
+              "Execution Time": 3.473
+            },
+            "plan_summary": {
+              "execution_time_ms": 3.473,
+              "planning_time_ms": 0.052,
+              "shared_hit_blocks": 800,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 1000)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              73.3501,
+              74.3541,
+              80.5497,
+              85.6813,
+              92.7655,
+              98.5622,
+              88.4356
+            ],
+            "row_count": 49845,
+            "median_ms": 85.6813,
+            "min_ms": 73.3501,
+            "max_ms": 98.5622,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.015,
+                "Actual Total Time": 11.097,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.07,
+              "Triggers": [],
+              "Execution Time": 13.588
+            },
+            "plan_summary": {
+              "execution_time_ms": 13.588,
+              "planning_time_ms": 0.07,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 27.798
+      },
+      "improvement_pct": 38.30378693300042,
+      "added_indexes": [
+        {
+          "candidate": {
+            "index_name": "imx_9bac017f93060cad",
+            "schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+            "table": "orders",
+            "columns": [
+              "customer_id"
+            ],
+            "source_query_ids": [
+              "S1",
+              "S2",
+              "S3",
+              "S4"
+            ],
+            "source_frequency": 4,
+            "estimated_table_rows": 100000,
+            "estimated_distinct_values": {
+              "customer_id": 9847
+            }
+          },
+          "index_size_bytes": 942080,
+          "index_build_execute_ms": 38.7561
+        }
+      ],
+      "total_added_index_bytes": 942080,
+      "queries_using_added_indexes": {
+        "imx_9bac017f93060cad": [
+          "S1",
+          "S2",
+          "S3"
+        ]
+      },
+      "row_counts_match": true,
+      "trial": 2
+    },
+    {
+      "phase_order": [
+        "baseline",
+        "indexed"
+      ],
+      "baseline": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 45,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S1",
+            "S4",
+            "S2",
+            "S3"
+          ],
+          [
+            "S4",
+            "S2",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S3",
+            "S1",
+            "S4"
+          ],
+          [
+            "S4",
+            "S2",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ],
+          [
+            "S3",
+            "S1",
+            "S4",
+            "S2"
+          ],
+          [
+            "S1",
+            "S4",
+            "S3",
+            "S2"
+          ],
+          [
+            "S4",
+            "S2",
+            "S3",
+            "S1"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              9.6531,
+              7.9803,
+              9.8944,
+              6.5309,
+              8.7966,
+              8.0958,
+              11.3467
+            ],
+            "row_count": 90,
+            "median_ms": 8.7966,
+            "min_ms": 6.5309,
+            "max_ms": 11.3467,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.074,
+                "Actual Total Time": 5.98,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 10)",
+                "Rows Removed by Filter": 99910,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.12,
+              "Triggers": [],
+              "Execution Time": 6.005
+            },
+            "plan_summary": {
+              "execution_time_ms": 6.005,
+              "planning_time_ms": 0.12,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99910,
+                  "filter": "(customer_id <= 10)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              11.1168,
+              8.6616,
+              12.1024,
+              10.073,
+              12.9871,
+              9.7903,
+              14.9731
+            ],
+            "row_count": 974,
+            "median_ms": 11.1168,
+            "min_ms": 8.6616,
+            "max_ms": 14.9731,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.014,
+                "Actual Total Time": 4.31,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 100)",
+                "Rows Removed by Filter": 99026,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.046,
+              "Triggers": [],
+              "Execution Time": 4.363
+            },
+            "plan_summary": {
+              "execution_time_ms": 4.363,
+              "planning_time_ms": 0.046,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 99026,
+                  "filter": "(customer_id <= 100)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              32.6401,
+              27.9616,
+              26.0689,
+              33.1218,
+              26.778,
+              29.3331,
+              34.2528
+            ],
+            "row_count": 9817,
+            "median_ms": 29.3331,
+            "min_ms": 26.0689,
+            "max_ms": 34.2528,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.008,
+                "Actual Total Time": 11.464,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 1000)",
+                "Rows Removed by Filter": 90183,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.037,
+              "Triggers": [],
+              "Execution Time": 12.099
+            },
+            "plan_summary": {
+              "execution_time_ms": 12.099,
+              "planning_time_ms": 0.037,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 90183,
+                  "filter": "(customer_id <= 1000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": [
+                "orders: sequential scan discarded most rows. An index may help; benchmark to confirm."
+              ]
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              108.0948,
+              108.7568,
+              117.7633,
+              103.468,
+              107.8403,
+              111.3818,
+              114.5851
+            ],
+            "row_count": 49845,
+            "median_ms": 108.7568,
+            "min_ms": 103.468,
+            "max_ms": 117.7633,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.011,
+                "Actual Total Time": 13.383,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.093,
+              "Triggers": [],
+              "Execution Time": 16.446
+            },
+            "plan_summary": {
+              "execution_time_ms": 16.446,
+              "planning_time_ms": 0.093,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 39.500825
+      },
+      "indexed": {
+        "protocol": {
+          "warmup_rounds": 2,
+          "measured_rounds": 7,
+          "shuffle_seed": 45,
+          "timing": "client execute + fetchall, milliseconds",
+          "cache_policy": "warmup rounds; no forced cache clearing",
+          "frequency_usage": "aggregation weights; equal repeats per query"
+        },
+        "round_order": [
+          [
+            "S1",
+            "S4",
+            "S2",
+            "S3"
+          ],
+          [
+            "S4",
+            "S2",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S3",
+            "S1",
+            "S4"
+          ],
+          [
+            "S4",
+            "S2",
+            "S1",
+            "S3"
+          ],
+          [
+            "S2",
+            "S4",
+            "S3",
+            "S1"
+          ],
+          [
+            "S3",
+            "S1",
+            "S4",
+            "S2"
+          ],
+          [
+            "S1",
+            "S4",
+            "S3",
+            "S2"
+          ],
+          [
+            "S4",
+            "S2",
+            "S3",
+            "S1"
+          ]
+        ],
+        "database_settings": {
+          "block_size": {
+            "value": "8192",
+            "unit": null
+          },
+          "effective_cache_size": {
+            "value": "524288",
+            "unit": "8kB"
+          },
+          "jit": {
+            "value": "on",
+            "unit": null
+          },
+          "max_parallel_workers_per_gather": {
+            "value": "2",
+            "unit": null
+          },
+          "random_page_cost": {
+            "value": "4",
+            "unit": null
+          },
+          "seq_page_cost": {
+            "value": "1",
+            "unit": null
+          },
+          "server_version": {
+            "value": "17.12 (Debian 17.12-1.pgdg13+1)",
+            "unit": null
+          },
+          "shared_buffers": {
+            "value": "16384",
+            "unit": "8kB"
+          },
+          "track_io_timing": {
+            "value": "off",
+            "unit": null
+          },
+          "work_mem": {
+            "value": "4096",
+            "unit": "kB"
+          }
+        },
+        "queries": [
+          {
+            "id": "S1",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+            "frequency": 1,
+            "samples_ms": [
+              2.6724,
+              1.9658,
+              2.2274,
+              1.5398,
+              1.7023,
+              1.4619,
+              1.5432
+            ],
+            "row_count": 90,
+            "median_ms": 1.7023,
+            "min_ms": 1.4619,
+            "max_ms": 2.6724,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 5.05,
+                "Total Cost": 282.37,
+                "Plan Rows": 98,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.013,
+                "Actual Total Time": 0.139,
+                "Actual Rows": 90,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 10)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 85,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 87,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.03,
+                    "Plan Rows": 98,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.004,
+                    "Actual Total Time": 0.004,
+                    "Actual Rows": 90,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 10)",
+                    "Shared Hit Blocks": 2,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.047,
+              "Triggers": [],
+              "Execution Time": 0.151
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.151,
+              "planning_time_ms": 0.047,
+              "shared_hit_blocks": 87,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 98,
+                  "actual_rows_per_loop": 90,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 10)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S2",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+            "frequency": 1,
+            "samples_ms": [
+              3.3474,
+              3.3629,
+              5.2532,
+              3.0287,
+              4.769,
+              3.1769,
+              4.1373
+            ],
+            "row_count": 974,
+            "median_ms": 3.3629,
+            "min_ms": 3.0287,
+            "max_ms": 5.2532,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 15.87,
+                "Total Cost": 856.69,
+                "Plan Rows": 978,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.09,
+                "Actual Total Time": 0.742,
+                "Actual Rows": 974,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 100)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 561,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 564,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 15.63,
+                    "Plan Rows": 978,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.042,
+                    "Actual Total Time": 0.043,
+                    "Actual Rows": 974,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 100)",
+                    "Shared Hit Blocks": 3,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.062,
+              "Triggers": [],
+              "Execution Time": 0.79
+            },
+            "plan_summary": {
+              "execution_time_ms": 0.79,
+              "planning_time_ms": 0.062,
+              "shared_hit_blocks": 564,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 978,
+                  "actual_rows_per_loop": 974,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 100)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S3",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+            "frequency": 1,
+            "samples_ms": [
+              15.9086,
+              17.5688,
+              16.6193,
+              15.2333,
+              14.6445,
+              15.665,
+              15.2212
+            ],
+            "row_count": 9817,
+            "median_ms": 15.665,
+            "min_ms": 14.6445,
+            "max_ms": 17.5688,
+            "explain": {
+              "Plan": {
+                "Node Type": "Bitmap Heap Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 126.41,
+                "Total Cost": 1039.41,
+                "Plan Rows": 10080,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.322,
+                "Actual Total Time": 2.108,
+                "Actual Rows": 9817,
+                "Actual Loops": 1,
+                "Recheck Cond": "(customer_id <= 1000)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 787,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 800,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "imx_9bac017f93060cad",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 123.89,
+                    "Plan Rows": 10080,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.256,
+                    "Actual Total Time": 0.256,
+                    "Actual Rows": 9817,
+                    "Actual Loops": 1,
+                    "Index Cond": "(customer_id <= 1000)",
+                    "Shared Hit Blocks": 13,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.028,
+              "Triggers": [],
+              "Execution Time": 2.42
+            },
+            "plan_summary": {
+              "execution_time_ms": 2.42,
+              "planning_time_ms": 0.028,
+              "shared_hit_blocks": 800,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Bitmap Heap Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": null
+                },
+                {
+                  "node_type": "Bitmap Index Scan",
+                  "depth": 1,
+                  "table": null,
+                  "index": "imx_9bac017f93060cad",
+                  "join_type": null,
+                  "estimated_rows_per_loop": 10080,
+                  "actual_rows_per_loop": 9817,
+                  "loops": 1,
+                  "rows_removed_per_loop": 0,
+                  "filter": null,
+                  "index_condition": "(customer_id <= 1000)"
+                }
+              ],
+              "observations": []
+            }
+          },
+          {
+            "id": "S4",
+            "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+            "frequency": 1,
+            "samples_ms": [
+              67.8535,
+              77.1265,
+              71.1634,
+              71.4798,
+              72.099,
+              66.6462,
+              66.9963
+            ],
+            "row_count": 49845,
+            "median_ms": 71.1634,
+            "min_ms": 66.6462,
+            "max_ms": 77.1265,
+            "explain": {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "orders",
+                "Alias": "orders",
+                "Startup Cost": 0.0,
+                "Total Cost": 2037.0,
+                "Plan Rows": 49786,
+                "Plan Width": 31,
+                "Actual Startup Time": 0.01,
+                "Actual Total Time": 6.811,
+                "Actual Rows": 49845,
+                "Actual Loops": 1,
+                "Filter": "(customer_id <= 5000)",
+                "Rows Removed by Filter": 50155,
+                "Shared Hit Blocks": 787,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.037,
+              "Triggers": [],
+              "Execution Time": 8.433
+            },
+            "plan_summary": {
+              "execution_time_ms": 8.433,
+              "planning_time_ms": 0.037,
+              "shared_hit_blocks": 787,
+              "shared_read_blocks": 0,
+              "nodes": [
+                {
+                  "node_type": "Seq Scan",
+                  "depth": 0,
+                  "table": "orders",
+                  "index": null,
+                  "join_type": null,
+                  "estimated_rows_per_loop": 49786,
+                  "actual_rows_per_loop": 49845,
+                  "loops": 1,
+                  "rows_removed_per_loop": 50155,
+                  "filter": "(customer_id <= 5000)",
+                  "index_condition": null
+                }
+              ],
+              "observations": []
+            }
+          }
+        ],
+        "weighted_mean_of_medians_ms": 22.973399999999998
+      },
+      "improvement_pct": 41.8407083902678,
+      "added_indexes": [
+        {
+          "candidate": {
+            "index_name": "imx_9bac017f93060cad",
+            "schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+            "table": "orders",
+            "columns": [
+              "customer_id"
+            ],
+            "source_query_ids": [
+              "S1",
+              "S2",
+              "S3",
+              "S4"
+            ],
+            "source_frequency": 4,
+            "estimated_table_rows": 100000,
+            "estimated_distinct_values": {
+              "customer_id": 9847
+            }
+          },
+          "index_size_bytes": 942080,
+          "index_build_execute_ms": 43.1763
+        }
+      ],
+      "total_added_index_bytes": 942080,
+      "queries_using_added_indexes": {
+        "imx_9bac017f93060cad": [
+          "S1",
+          "S2",
+          "S3"
+        ]
+      },
+      "row_counts_match": true,
+      "trial": 3
+    }
+  ],
+  "dataset_metadata": {
+    "schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+    "tables": [
+      {
+        "table_name": "customers",
+        "estimated_rows": 10000,
+        "table_bytes": 557056,
+        "index_bytes": 245760,
+        "columns": [
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "customer_name",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "region",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "customers_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX customers_pkey ON imx_selectivity_c06622857a2a48a58b91d8dd78819681.customers USING btree (customer_id)",
+            "key_columns": [
+              "customer_id"
+            ]
+          }
+        ]
+      },
+      {
+        "table_name": "orders",
+        "estimated_rows": 100000,
+        "table_bytes": 6479872,
+        "index_bytes": 2260992,
+        "columns": [
+          {
+            "column_name": "order_id",
+            "data_type": "bigint",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 100000
+          },
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": 9847.0,
+            "estimated_distinct_values": 9847
+          },
+          {
+            "column_name": "order_date",
+            "data_type": "date",
+            "null_frac": 0.0,
+            "n_distinct": 730.0,
+            "estimated_distinct_values": 730
+          },
+          {
+            "column_name": "status",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          },
+          {
+            "column_name": "total_amount",
+            "data_type": "numeric(10,2)",
+            "null_frac": 0.0,
+            "n_distinct": -0.53586,
+            "estimated_distinct_values": 53586
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "orders_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX orders_pkey ON imx_selectivity_c06622857a2a48a58b91d8dd78819681.orders USING btree (order_id)",
+            "key_columns": [
+              "order_id"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "candidate": {
+    "index_name": "imx_9bac017f93060cad",
+    "schema": "imx_selectivity_c06622857a2a48a58b91d8dd78819681",
+    "table": "orders",
+    "columns": [
+      "customer_id"
+    ],
+    "source_query_ids": [
+      "S1",
+      "S2",
+      "S3",
+      "S4"
+    ],
+    "source_frequency": 4,
+    "estimated_table_rows": 100000,
+    "estimated_distinct_values": {
+      "customer_id": 9847
+    }
+  },
+  "workload_queries": [
+    {
+      "id": "S1",
+      "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 10",
+      "frequency": 1
+    },
+    {
+      "id": "S2",
+      "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 100",
+      "frequency": 1
+    },
+    {
+      "id": "S3",
+      "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 1000",
+      "frequency": 1
+    },
+    {
+      "id": "S4",
+      "sql": "SELECT * FROM \"imx_selectivity_c06622857a2a48a58b91d8dd78819681\".\"orders\" AS \"orders\" WHERE \"orders\".\"customer_id\" <= 5000",
+      "frequency": 1
+    }
+  ],
+  "summary": [
+    {
+      "id": "S1",
+      "target_match_pct": 0.1,
+      "customer_id_upper_bound": 10,
+      "matching_rows": 90,
+      "actual_match_pct": 0.09,
+      "baseline_ms_by_trial": [
+        6.3046,
+        10.1992,
+        8.7966
+      ],
+      "indexed_ms_by_trial": [
+        1.3969,
+        2.5069,
+        1.7023
+      ],
+      "paired_improvement_pct_by_trial": [
+        77.84316213558355,
+        75.42062122519413,
+        80.64820498829093
+      ],
+      "median_baseline_ms": 8.7966,
+      "median_indexed_ms": 1.7023,
+      "median_paired_improvement_pct": 77.84316213558355,
+      "baseline_scan_types_by_trial": [
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ]
+      ],
+      "indexed_scan_types_by_trial": [
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ]
+      ],
+      "candidate_used_by_trial": [
+        true,
+        true,
+        true
+      ],
+      "candidate_used_trials": 3,
+      "trial_count": 3
+    },
+    {
+      "id": "S2",
+      "target_match_pct": 1.0,
+      "customer_id_upper_bound": 100,
+      "matching_rows": 974,
+      "actual_match_pct": 0.974,
+      "baseline_ms_by_trial": [
+        6.6255,
+        12.1095,
+        11.1168
+      ],
+      "indexed_ms_by_trial": [
+        2.6781,
+        3.402,
+        3.3629
+      ],
+      "paired_improvement_pct_by_trial": [
+        59.57889970568259,
+        71.90635451505017,
+        69.74938831318366
+      ],
+      "median_baseline_ms": 11.1168,
+      "median_indexed_ms": 3.3629,
+      "median_paired_improvement_pct": 69.74938831318366,
+      "baseline_scan_types_by_trial": [
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ]
+      ],
+      "indexed_scan_types_by_trial": [
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ]
+      ],
+      "candidate_used_by_trial": [
+        true,
+        true,
+        true
+      ],
+      "candidate_used_trials": 3,
+      "trial_count": 3
+    },
+    {
+      "id": "S3",
+      "target_match_pct": 10.0,
+      "customer_id_upper_bound": 1000,
+      "matching_rows": 9817,
+      "actual_match_pct": 9.817,
+      "baseline_ms_by_trial": [
+        20.882,
+        34.3958,
+        29.3331
+      ],
+      "indexed_ms_by_trial": [
+        14.814,
+        19.6018,
+        15.665
+      ],
+      "paired_improvement_pct_by_trial": [
+        29.058519298917734,
+        43.01106530448485,
+        46.59616610586676
+      ],
+      "median_baseline_ms": 29.3331,
+      "median_indexed_ms": 15.665,
+      "median_paired_improvement_pct": 43.01106530448485,
+      "baseline_scan_types_by_trial": [
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ]
+      ],
+      "indexed_scan_types_by_trial": [
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ],
+        [
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan"
+        ]
+      ],
+      "candidate_used_by_trial": [
+        true,
+        true,
+        true
+      ],
+      "candidate_used_trials": 3,
+      "trial_count": 3
+    },
+    {
+      "id": "S4",
+      "target_match_pct": 50.0,
+      "customer_id_upper_bound": 5000,
+      "matching_rows": 49845,
+      "actual_match_pct": 49.845,
+      "baseline_ms_by_trial": [
+        76.4591,
+        123.5205,
+        108.7568
+      ],
+      "indexed_ms_by_trial": [
+        66.8401,
+        85.6813,
+        71.1634
+      ],
+      "paired_improvement_pct_by_trial": [
+        12.580582298248343,
+        30.633943353532413,
+        34.56648227972872
+      ],
+      "median_baseline_ms": 108.7568,
+      "median_indexed_ms": 71.1634,
+      "median_paired_improvement_pct": 30.633943353532413,
+      "baseline_scan_types_by_trial": [
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ]
+      ],
+      "indexed_scan_types_by_trial": [
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ],
+        [
+          "Seq Scan"
+        ]
+      ],
+      "candidate_used_by_trial": [
+        false,
+        false,
+        false
+      ],
+      "candidate_used_trials": 0,
+      "trial_count": 3
+    }
+  ],
+  "source_metadata_after": {
+    "schema": "benchmark",
+    "tables": [
+      {
+        "table_name": "customers",
+        "estimated_rows": 10000,
+        "table_bytes": 565248,
+        "index_bytes": 245760,
+        "columns": [
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "customer_name",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 10000
+          },
+          {
+            "column_name": "region",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "customers_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX customers_pkey ON benchmark.customers USING btree (customer_id)",
+            "key_columns": [
+              "customer_id"
+            ]
+          }
+        ]
+      },
+      {
+        "table_name": "orders",
+        "estimated_rows": 100000,
+        "table_bytes": 6488064,
+        "index_bytes": 2260992,
+        "columns": [
+          {
+            "column_name": "order_id",
+            "data_type": "bigint",
+            "null_frac": 0.0,
+            "n_distinct": -1.0,
+            "estimated_distinct_values": 100000
+          },
+          {
+            "column_name": "customer_id",
+            "data_type": "integer",
+            "null_frac": 0.0,
+            "n_distinct": 9877.0,
+            "estimated_distinct_values": 9877
+          },
+          {
+            "column_name": "order_date",
+            "data_type": "date",
+            "null_frac": 0.0,
+            "n_distinct": 730.0,
+            "estimated_distinct_values": 730
+          },
+          {
+            "column_name": "status",
+            "data_type": "text",
+            "null_frac": 0.0,
+            "n_distinct": 4.0,
+            "estimated_distinct_values": 4
+          },
+          {
+            "column_name": "total_amount",
+            "data_type": "numeric(10,2)",
+            "null_frac": 0.0,
+            "n_distinct": -0.53894,
+            "estimated_distinct_values": 53894
+          }
+        ],
+        "indexes": [
+          {
+            "index_name": "orders_pkey",
+            "method": "btree",
+            "is_primary": true,
+            "is_unique": true,
+            "is_valid": true,
+            "is_ready": true,
+            "is_partial": false,
+            "has_expressions": false,
+            "definition": "CREATE UNIQUE INDEX orders_pkey ON benchmark.orders USING btree (order_id)",
+            "key_columns": [
+              "order_id"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "source_index_layout_unchanged": true
+}
