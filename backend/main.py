@@ -51,3 +51,7 @@ def recommendations():
             status_code=500,
             detail="The saved experiment report could not be read.",
         ) from exc
+
+from backend.comparison_api import router as comparison_router
+
+app.include_router(comparison_router)

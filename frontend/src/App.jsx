@@ -1,3 +1,4 @@
+import QueryDetails from './QueryDetails.jsx'
 import { useEffect, useState } from 'react'
 import './index.css'
 
@@ -289,6 +290,8 @@ export default function App() {
               </details>
             </section>
 
+            <QueryDetails key={data.source_report} report={data} />
+
             <p className="footer-note">
               Recommendations reflect this recorded workload.
               This dashboard displays results; it does not apply indexes.
@@ -299,4 +302,5 @@ export default function App() {
     </>
   )
 }
+
 
