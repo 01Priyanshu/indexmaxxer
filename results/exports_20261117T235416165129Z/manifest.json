@@ -1,0 +1,34 @@
+{
+  "exported_at_utc": "2026-11-17T23:54:16.165129+00:00",
+  "python": "3.12.10",
+  "matplotlib": "3.11.2",
+  "sources": [
+    {
+      "filename": "index_comparison_20261116T064629713888Z.json",
+      "sha256": "8a1e8925bdf39606972d1d3f016c43df024c8199ae2fd84d51a2ec458986f2a9"
+    },
+    {
+      "filename": "write_comparison_20261117T194157203056Z.json",
+      "sha256": "a75260059c1950c7e17bd560210bece3ac300ab8a3e7547f5d35e10ca9f049f1"
+    },
+    {
+      "filename": "strategy_comparison_20261117T203616492629Z.json",
+      "sha256": "73896e02dba471f027cd580927f8655f08ff33a5285d2898aa354513137ae7aa"
+    },
+    {
+      "filename": "scale_comparison_20261117T205852369316Z.json",
+      "sha256": "408e38eb3ef05a8a2d5ab288efe64ea97006458da0230b96168af7bfa2660e0e"
+    },
+    {
+      "filename": "selectivity_comparison_20261117T210822783382Z.json",
+      "sha256": "564d14db410c7e8de9582a51e4d9f8dffe6fa00f90ed7a9823ade5fe6b448f1c"
+    }
+  ],
+  "notes": [
+    "Raw experiment reports were not modified.",
+    "Paired percentage medians need not equal percentages calculated from timing medians.",
+    "Whiskers are observed ranges, not confidence intervals or significance tests.",
+    "Selectivity timing changes without index use are marked as unexplained.",
+    "These figures cover synthetic experiments; they do not establish results on a real dataset."
+  ]
+}

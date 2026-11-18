@@ -1,0 +1,6 @@
+﻿index,baseline_ms,indexed_ms,measured_improvement_pct,index_size_mib,shortlisted
+orders(customer_id),9.098065,6.220644999999999,31.62672502339784,0.8984375,True
+"orders(order_date, customer_id)",9.356405,6.800285,27.319467252646724,2.1484375,True
+"orders(customer_id, order_date)",8.953814999999999,6.6135850000000005,26.1366802865594,2.1484375,True
+orders(order_date),9.01899,8.715160000000001,3.368780761482157,0.6796875,False
+orders(status),9.253865,9.100055,1.6621163157232142,0.6796875,False

@@ -1,0 +1,4 @@
+﻿operation,rows_per_batch,baseline_ms,indexed_ms,write_overhead_pct,measured_repeats
+INSERT orders,1000,11.3905,12.9353,13.56217900882315,7
+UPDATE customer_id,1000,14.8828,18.7999,26.31964415298198,7
+UPDATE total_amount,1000,9.4878,10.9617,15.534686650224504,7

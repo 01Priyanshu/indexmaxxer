@@ -1,0 +1,3 @@
+﻿configuration,added_index_count,median_baseline_ms,median_indexed_ms,median_paired_improvement_pct,added_index_size_mib
+advisor_selected,1,10.46123,7.249385000000001,29.79491895312502,0.8984375
+naive_filtered_columns,3,10.09918,6.293690000000001,37.26287678801646,2.2578125

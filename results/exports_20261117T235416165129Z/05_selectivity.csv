@@ -1,0 +1,5 @@
+﻿query,target_match_pct,actual_match_pct,matching_rows,median_baseline_ms,median_index_available_ms,median_paired_timing_decrease_pct,candidate_used_trials,trial_count,scan_types_with_index_available,interpretation
+S1,0.1,0.09,90,8.7966,1.7023,77.84316213558355,3,3,Bitmap Heap Scan + Bitmap Index Scan,Index observed in diagnostic plans; measured timing change
+S2,1.0,0.974,974,11.1168,3.3629,69.74938831318366,3,3,Bitmap Heap Scan + Bitmap Index Scan,Index observed in diagnostic plans; measured timing change
+S3,10.0,9.817,9817,29.3331,15.665,43.01106530448485,3,3,Bitmap Heap Scan + Bitmap Index Scan,Index observed in diagnostic plans; measured timing change
+S4,50.0,49.845,49845,108.7568,71.1634,30.633943353532413,0,3,Seq Scan,Index unused; timing difference unexplained
