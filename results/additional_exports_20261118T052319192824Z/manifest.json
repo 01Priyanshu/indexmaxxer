@@ -1,0 +1,32 @@
+{
+  "recorded_at_utc": "2026-11-18T05:23:19.192824+00:00",
+  "sources": [
+    {
+      "file": "frequency_comparison_20261118T012523648000Z.json",
+      "sha256": "a0417207da13ba8e7a4e660d9ce6a9fc64995836c7e1d657915a92738081440d"
+    },
+    {
+      "file": "skew_comparison_20261118T050944326523Z.json",
+      "sha256": "2a5e41d576636a7cbf6b053050f4e6bb63d0be8b1f51a9f648c274b3b4fb51d6"
+    },
+    {
+      "file": "tpch_comparison_20261118T051929603347Z.json",
+      "sha256": "c65172f474a8d97a6b21b0136c5dfdd37ea8806d5e142e5f4166f333005b9b24"
+    }
+  ],
+  "matplotlib_version": "3.11.2",
+  "files": [
+    "06_frequency_selections.csv",
+    "06_frequency_weights.csv",
+    "06_frequency_weights.png",
+    "06_frequency_weights.svg",
+    "07_data_skew.csv",
+    "07_data_skew.png",
+    "07_data_skew.svg",
+    "07_data_skew_queries.csv",
+    "08_selected_tpch.csv",
+    "08_selected_tpch.png",
+    "08_selected_tpch.svg",
+    "08_selected_tpch_layouts.csv"
+  ]
+}

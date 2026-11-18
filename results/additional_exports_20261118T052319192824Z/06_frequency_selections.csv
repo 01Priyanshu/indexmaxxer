@@ -1,0 +1,3 @@
+﻿method,selected_index,common_weight_baseline_ms,common_weight_indexed_ms,common_weight_gain_pct
+frequency_aware,orders(customer_id),9.098065,6.220644999999999,31.62672502339784
+equal_weights,orders(customer_id),9.098065,6.220644999999999,31.62672502339784

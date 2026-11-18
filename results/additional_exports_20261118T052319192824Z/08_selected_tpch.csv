@@ -1,0 +1,7 @@
+﻿configuration,query,baseline_ms,indexed_ms,paired_gain_pct,trials_using_added_index
+shipdate_single,TPCH_Q1,167.715,161.157,0.86440759290904,0
+shipdate_single,TPCH_Q3,45.4884,46.6141,-4.825224204153956,0
+shipdate_single,TPCH_Q6,32.8159,26.6805,15.918996341221298,3
+query_targeted,TPCH_Q1,173.7171,169.924,2.099149261066344,0
+query_targeted,TPCH_Q3,45.8248,34.9567,23.716633787817962,3
+query_targeted,TPCH_Q6,34.2518,19.3127,44.46272103248663,3

@@ -4,6 +4,7 @@ anyio==4.16.0
 click==8.5.1
 contourpy==1.4.0
 cycler==0.12.1
+duckdb==2.0.0
 fastapi==0.163.1
 fonttools==4.68.0
 h11==0.16.0

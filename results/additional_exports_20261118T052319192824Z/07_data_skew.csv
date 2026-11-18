@@ -1,0 +1,3 @@
+﻿distribution,hot_customer_share_pct,median_baseline_ms,median_indexed_ms,median_paired_gain_pct,index_size_mib
+uniform,1.005,10.08662,6.923195000000001,31.362587269075263,0.8984375
+skewed,79.997,17.3075,14.616515,16.451788411500182,0.890625

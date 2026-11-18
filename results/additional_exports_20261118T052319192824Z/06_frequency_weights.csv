@@ -1,0 +1,6 @@
+﻿index,recorded_frequency_gain_pct,equal_weight_gain_pct,recorded_frequency_eligible,equal_weight_eligible
+orders(customer_id),31.62672502339784,21.094453712613387,True,True
+"orders(order_date, customer_id)",27.319467252646724,20.431152777808567,True,True
+"orders(customer_id, order_date)",26.1366802865594,16.03953654764927,True,True
+orders(order_date),3.368780761482157,4.082877136302231,False,False
+orders(status),1.6621163157232142,2.647981345978002,False,False
