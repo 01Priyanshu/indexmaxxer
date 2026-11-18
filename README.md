@@ -188,3 +188,7 @@ Whiskers represent observed minimum-to-maximum times or paired changes, not conf
 The last recorded frontend `npm audit` reported five high-severity dependency entries in the `picomatch` dependency chain. Remediation has not been validated in this project. Check `npm audit` before deployment; the local development setup binds the servers to loopback addresses.
 
 See [the demo guide](docs/DEMO.md) for the walkthrough and presentation preparation.
+
+## Additional experiments
+
+Frequency weighting, data skew, and selected TPC-H experiments are complete. See [methods and reproduction steps](docs/ADDITIONAL_EXPERIMENTS.md). Additional graphs and tables are saved under results/additional_exports_20261118T052319192824Z/.
